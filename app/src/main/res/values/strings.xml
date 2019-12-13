@@ -3,6 +3,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="menu_settings_id">Settings menu</string>
     <string name="menu_settings_title">Settings</string>
-    <string name="settings_sattelite_title">Sattelite view</string>
-    <string name="settings_sattelite_description">Enable sattelite map view</string>
+    <string name="settings_satellite_title">Satellite view</string>
+    <string name="settings_satellite_description">Enable satellite map view</string>
+    <string name="setting_satellite_id">Satellite</string>
 </resources>
