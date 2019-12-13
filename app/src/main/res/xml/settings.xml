@@ -6,4 +6,6 @@
         android:title="@string/settings_sattelite_title"
         android:summary="@string/settings_sattelite_description"
         android:defaultValue="false" />
+
+
 </PreferenceScreen>
