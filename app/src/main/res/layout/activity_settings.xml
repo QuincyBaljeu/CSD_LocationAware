@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".SettingsActivity">
 
+    <include
+        android:id="@+id/custom_action_bar"
+        layout="@layout/custom_toolbar"
+        />
+
+
     <FrameLayout
         android:id="@+id/settings_FrameContainer"
         android:layout_width="0dp"
@@ -13,7 +19,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/custom_action_bar">
 
     </FrameLayout>
 
