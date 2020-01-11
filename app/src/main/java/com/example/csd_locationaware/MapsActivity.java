@@ -2,10 +2,22 @@ package com.example.csd_locationaware;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.Context;
+
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +28,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,12 +36,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements
+public class MapsActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener
-{
+        LocationListener {
+    String TAG = "@MAP";
 
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
@@ -39,10 +52,15 @@ public class MapsActivity extends FragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        Toolbar toolbar = findViewById(R.id.custom_action_bar);
+        setSupportActionBar(toolbar);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        SupportMapFragment fragment = new SupportMapFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.mapView, fragment).commit();
+        fragment.getMapAsync(this);
+
     }
 
 
@@ -58,25 +76,27 @@ public class MapsActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-
         buildGoogleApiClient();
         mMap.setMyLocationEnabled(true);
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+
     }
 
     protected synchronized void buildGoogleApiClient(){
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        boolean success = LocationUtil.checkLocationPermission(this);
 
-        googleApiClient.connect();
+        if (success) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
 
+            googleApiClient.connect();
+        }else {
+            finish();
+        }
+        Log.d(TAG, "buildGoogleApiClient: " + success);
     }
 
 
@@ -87,12 +107,14 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        locationRequest = new LocationRequest();
-        locationRequest.setInterval(1100);
-        locationRequest.setFastestInterval(1100);
-        locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        locationRequest = LocationUtil.getNewLocationRequest();
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+        boolean success = LocationUtil.checkLocationPermission(this);
+        Log.d(TAG, "onConnected: " + success);
+
+        if (success) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+        }
     }
 
     @Override
@@ -104,4 +126,5 @@ public class MapsActivity extends FragmentActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
 }
