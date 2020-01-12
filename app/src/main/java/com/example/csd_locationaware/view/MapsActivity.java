@@ -165,8 +165,7 @@ public class MapsActivity extends AppCompatActivity implements
             startActivity(intent);
         }
         if (id == R.id.action_location) {
-            //TODO: make a locations activity
-            Intent intent = new Intent(MapsActivity.this, SettingsActivity.class);
+            Intent intent = new Intent(MapsActivity.this, Locations.class);
             startActivity(intent);
         }
 
