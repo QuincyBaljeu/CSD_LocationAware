@@ -20,6 +20,8 @@ import com.example.csd_locationaware.util.Bar;
 import com.example.csd_locationaware.util.Bars;
 import com.example.csd_locationaware.util.LocationUtil;
 import com.example.csd_locationaware.util.PlacesApi;
+import com.example.csd_locationaware.util.directionhelpers.FetchURL;
+import com.example.csd_locationaware.util.directionhelpers.TaskLoadedCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationListener;
 
@@ -32,6 +34,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.json.JSONArray;
 
@@ -39,7 +43,8 @@ public class MapsActivity extends AppCompatActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        TaskLoadedCallback {
     String TAG = "@MAP";
 
     private GoogleMap mMap;
@@ -47,6 +52,7 @@ public class MapsActivity extends AppCompatActivity implements
     private LocationRequest locationRequest;
     private LatLng currentLocation = null;
     private PlacesApi placesApi;
+    private Polyline userPolyLine;
 
     private boolean StartUp = false;
 
@@ -68,6 +74,7 @@ public class MapsActivity extends AppCompatActivity implements
                 for (int i = 0; i < Bars.bars.size(); i++) {
                     Bar bar = Bars.bars.get(i);
                     mMap.addMarker(new MarkerOptions().position(bar.getLocation()).title(bar.getName()));
+                    getDirections(Bars.bars.get(0).getLocation(), Bars.bars.get(1).getLocation());
                 }
                 Log.i(TAG, "doneLoading: done loading bars...");
             }
@@ -80,6 +87,7 @@ public class MapsActivity extends AppCompatActivity implements
         SupportMapFragment fragment = new SupportMapFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.mapView, fragment).commit();
         fragment.getMapAsync(this);
+
     }
 
 
@@ -178,5 +186,17 @@ public class MapsActivity extends AppCompatActivity implements
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void getDirections(LatLng origin, LatLng destination) {
+        new FetchURL(MapsActivity.this).execute(Bars.getDirectionsUrl(origin, destination), "walking");
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        if(userPolyLine != null){
+            userPolyLine.remove();
+        }
+        userPolyLine = mMap.addPolyline((PolylineOptions) values[0]);
     }
 }

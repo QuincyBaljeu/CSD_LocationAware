@@ -53,5 +53,4 @@ public class PlacesApi {
     public void updateLocation(LatLng location) {
         this.URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location.latitude + ',' + location.longitude + "&radius=5000&type=bar&key="+ context.getString(R.string.google_place_key);
     }
-
 }

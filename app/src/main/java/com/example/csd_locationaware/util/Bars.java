@@ -1,11 +1,14 @@
 package com.example.csd_locationaware.util;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.example.csd_locationaware.controler.DoneLoading;
+import com.example.csd_locationaware.util.directionhelpers.FetchURL;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,5 +50,27 @@ public class Bars {
         }else Log.i(TAG, "generateBarList: Please call setUp() before trying to generate bars!");
 
         done.doneLoading();
+    }
+
+    public static String getDirectionsUrl(LatLng origin, LatLng destination){
+        String url = getUrl(new LatLng(origin.latitude, origin.longitude), new LatLng(destination.latitude, destination.longitude), "walking");
+        return url;
+    }
+
+    private static String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        //TODO API key from resource value
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=AIzaSyBifZx4KQ7SVgsSKdwW6H8mO-XuepF2Ur";
+        return url;
     }
 }
