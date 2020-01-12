@@ -35,8 +35,7 @@ public class PlacesApi {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    //rsp.onResponse(response.getJSONArray("candidates"));
-                    Log.d(TAG, "onResponse: " + response.getJSONArray("results"));
+                    rsp.onResponse(response.getJSONArray("results"));
                 } catch (JSONException e) {
                     Log.e(TAG, "onResponse: getData()", e);
                     Log.d(TAG, "onResponse: " + response);
@@ -52,7 +51,7 @@ public class PlacesApi {
     }
 
     public void updateLocation(LatLng location) {
-        this.URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location.latitude + ',' + location.longitude + "&radius=1500&type=bar&key="+ context.getString(R.string.google_place_key);
+        this.URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location.latitude + ',' + location.longitude + "&radius=5000&type=bar&key="+ context.getString(R.string.google_place_key);
     }
 
 }
