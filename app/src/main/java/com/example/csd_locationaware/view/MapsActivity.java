@@ -1,4 +1,4 @@
-package com.example.csd_locationaware;
+package com.example.csd_locationaware.view;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.csd_locationaware.R;
+import com.example.csd_locationaware.util.LocationUtil;
+import com.example.csd_locationaware.util.PlacesApi;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationListener;
 
@@ -22,6 +25,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 public class MapsActivity extends AppCompatActivity implements
         OnMapReadyCallback,
@@ -33,12 +37,17 @@ public class MapsActivity extends AppCompatActivity implements
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
+    private LatLng currentLocation = null;
+    private PlacesApi placesApi;
 
+    private boolean testPlacesApi = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        placesApi = new PlacesApi(this,new LatLng(0,0),null);
 
         Toolbar toolbar = findViewById(R.id.custom_action_bar);
         setSupportActionBar(toolbar);
@@ -86,7 +95,11 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
+        currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
+        placesApi.updateLocation(currentLocation);
 
+        if(!testPlacesApi)placesApi.getData();
+        testPlacesApi = true;
     }
 
     @Override
@@ -125,7 +138,7 @@ public class MapsActivity extends AppCompatActivity implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(MapsActivity.this,SettingsActivity.class);
+            Intent intent = new Intent(MapsActivity.this, SettingsActivity.class);
             startActivity(intent);
         }
 

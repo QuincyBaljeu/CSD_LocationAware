@@ -1,4 +1,4 @@
-package com.example.csd_locationaware;
+package com.example.csd_locationaware.util;
 
 import android.Manifest;
 import android.app.Activity;

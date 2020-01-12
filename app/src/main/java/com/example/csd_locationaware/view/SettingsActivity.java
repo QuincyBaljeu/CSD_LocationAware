@@ -1,9 +1,11 @@
-package com.example.csd_locationaware;
+package com.example.csd_locationaware.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+
+import com.example.csd_locationaware.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
