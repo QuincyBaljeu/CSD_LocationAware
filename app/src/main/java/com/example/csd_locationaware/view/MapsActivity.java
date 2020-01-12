@@ -122,13 +122,15 @@ public class MapsActivity extends AppCompatActivity implements
         currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
         placesApi.updateLocation(currentLocation);
 
-        if(!StartUp)placesApi.getData();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(
-                        location.getLatitude(),
-                        location.getLongitude()
-                ),15));
-        StartUp = true;
+        if(!StartUp) {
+            placesApi.getData();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(
+                            location.getLatitude(),
+                            location.getLongitude()
+                    ), 15));
+            StartUp = true;
+        }
     }
 
     @Override
