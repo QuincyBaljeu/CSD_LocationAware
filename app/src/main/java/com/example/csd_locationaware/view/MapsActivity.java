@@ -14,6 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.csd_locationaware.R;
+import com.example.csd_locationaware.controler.DoneLoading;
+import com.example.csd_locationaware.controler.OnResponse;
+import com.example.csd_locationaware.util.Bar;
+import com.example.csd_locationaware.util.Bars;
 import com.example.csd_locationaware.util.LocationUtil;
 import com.example.csd_locationaware.util.PlacesApi;
 import com.google.android.gms.common.ConnectionResult;
@@ -22,10 +26,14 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
 
 public class MapsActivity extends AppCompatActivity implements
         OnMapReadyCallback,
@@ -40,14 +48,30 @@ public class MapsActivity extends AppCompatActivity implements
     private LatLng currentLocation = null;
     private PlacesApi placesApi;
 
-    private boolean testPlacesApi = false;
+    private boolean StartUp = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        placesApi = new PlacesApi(this,new LatLng(0,0),null);
+        placesApi = new PlacesApi(this, new LatLng(0, 0), new OnResponse() {
+            @Override
+            public void onResponse(JSONArray array) {
+                Bars.generateBarList(array);
+                Log.d(TAG, "onResponse: " + array.toString());
+            }
+        });
+        Bars.setUp(new DoneLoading() {
+            @Override
+            public void doneLoading() {
+                for (int i = 0; i < Bars.bars.size(); i++) {
+                    Bar bar = Bars.bars.get(i);
+                    mMap.addMarker(new MarkerOptions().position(bar.getLocation()).title(bar.getName()));
+                }
+                Log.i(TAG, "doneLoading: done loading bars...");
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.custom_action_bar);
         setSupportActionBar(toolbar);
@@ -98,8 +122,15 @@ public class MapsActivity extends AppCompatActivity implements
         currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
         placesApi.updateLocation(currentLocation);
 
-        if(!testPlacesApi)placesApi.getData();
-        testPlacesApi = true;
+        if(!StartUp) {
+            placesApi.getData();
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(
+                            location.getLatitude(),
+                            location.getLongitude()
+                    ), 15));
+            StartUp = true;
+        }
     }
 
     @Override
@@ -139,6 +170,10 @@ public class MapsActivity extends AppCompatActivity implements
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MapsActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        }
+        if (id == R.id.action_location) {
+            Intent intent = new Intent(MapsActivity.this, Locations.class);
             startActivity(intent);
         }
 
