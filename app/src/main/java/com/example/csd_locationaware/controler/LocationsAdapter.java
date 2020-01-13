@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.csd_locationaware.R;
-import com.example.csd_locationaware.util.Bar;
-import com.example.csd_locationaware.util.Bars;
+import com.example.csd_locationaware.model.Bar;
+import com.example.csd_locationaware.model.Bars;
 
 public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.LocationsViewHolder> {
 
@@ -40,6 +40,7 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
     public int getItemCount() {
         return Bars.bars.size();
     }
+
 
     class LocationsViewHolder extends RecyclerView.ViewHolder {
         TextView name;

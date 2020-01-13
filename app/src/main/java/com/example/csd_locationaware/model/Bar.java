@@ -1,4 +1,4 @@
-package com.example.csd_locationaware.util;
+package com.example.csd_locationaware.model;
 
 import com.google.android.gms.maps.model.LatLng;
 
