@@ -1,4 +1,4 @@
-package com.example.csd_locationaware.util.directionhelpers;
+package com.example.csd_locationaware.util;
 
 /**
  * Created by Vishal on 10/20/2018.

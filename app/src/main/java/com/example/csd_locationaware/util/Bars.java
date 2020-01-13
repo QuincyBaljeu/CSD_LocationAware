@@ -1,17 +1,11 @@
 package com.example.csd_locationaware.util;
 
-import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import com.example.csd_locationaware.controler.DoneLoading;
-import com.example.csd_locationaware.util.directionhelpers.FetchURL;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

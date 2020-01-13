@@ -1,4 +1,4 @@
-package com.example.csd_locationaware.util.directionhelpers;
+package com.example.csd_locationaware.util;
 
 import android.content.Context;
 import android.graphics.Color;

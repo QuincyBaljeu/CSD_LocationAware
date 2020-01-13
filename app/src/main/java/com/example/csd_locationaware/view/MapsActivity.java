@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.csd_locationaware.R;
 import com.example.csd_locationaware.controler.DoneLoading;
@@ -20,8 +22,8 @@ import com.example.csd_locationaware.util.Bar;
 import com.example.csd_locationaware.util.Bars;
 import com.example.csd_locationaware.util.LocationUtil;
 import com.example.csd_locationaware.util.PlacesApi;
-import com.example.csd_locationaware.util.directionhelpers.FetchURL;
-import com.example.csd_locationaware.util.directionhelpers.TaskLoadedCallback;
+import com.example.csd_locationaware.util.FetchURL;
+import com.example.csd_locationaware.util.TaskLoadedCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationListener;
 
@@ -56,6 +58,11 @@ public class MapsActivity extends AppCompatActivity implements
 
     private boolean StartUp = false;
 
+    private MarkerOptions place1;
+    private MarkerOptions place2;
+
+    private Button directionsButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,20 +81,37 @@ public class MapsActivity extends AppCompatActivity implements
                 for (int i = 0; i < Bars.bars.size(); i++) {
                     Bar bar = Bars.bars.get(i);
                     mMap.addMarker(new MarkerOptions().position(bar.getLocation()).title(bar.getName()));
-                    getDirections(Bars.bars.get(0).getLocation(), Bars.bars.get(1).getLocation());
+
                 }
                 Log.i(TAG, "doneLoading: done loading bars...");
             }
         });
 
+        directionsButton = findViewById(R.id.btn_showDirection);
+        directionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+            }
+        });
+
         Toolbar toolbar = findViewById(R.id.custom_action_bar);
         setSupportActionBar(toolbar);
+        //Directions test
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment fragment = new SupportMapFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.mapView, fragment).commit();
         fragment.getMapAsync(this);
 
+    }
+
+    public void setUpDirectionsTest(){
+        place1 = new MarkerOptions().position(new LatLng(51.571915, 4.768323)).title("Location 1");
+        place2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583)).title("Location 2");
+
+        mMap.addMarker(place1);
+        mMap.addMarker(place2);
     }
 
 
@@ -98,13 +122,17 @@ public class MapsActivity extends AppCompatActivity implements
      * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     *
+     *
+     *
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         buildGoogleApiClient();
         mMap.setMyLocationEnabled(true);
+
+        setUpDirectionsTest();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -188,15 +216,26 @@ public class MapsActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    public void getDirections(LatLng origin, LatLng destination) {
-        new FetchURL(MapsActivity.this).execute(Bars.getDirectionsUrl(origin, destination), "walking");
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
+        return url;
     }
 
     @Override
     public void onTaskDone(Object... values) {
-        if(userPolyLine != null){
+        if(userPolyLine != null)
             userPolyLine.remove();
-        }
         userPolyLine = mMap.addPolyline((PolylineOptions) values[0]);
     }
 }

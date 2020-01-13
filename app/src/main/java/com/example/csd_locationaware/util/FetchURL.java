@@ -1,8 +1,10 @@
-package com.example.csd_locationaware.util.directionhelpers;
+package com.example.csd_locationaware.util;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.example.csd_locationaware.util.PointsParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
