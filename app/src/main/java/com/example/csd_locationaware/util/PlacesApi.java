@@ -53,7 +53,7 @@ public class PlacesApi {
     }
 
     public static void updateLocation(LatLng location) {
-        URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location.latitude + ',' + location.longitude + "&radius=5000&type=bar&key="+ context.getString(R.string.google_place_key);
+        URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + location.latitude + ',' + location.longitude + "&rankby=distance&type=bar&key="+ context.getString(R.string.google_place_key);
     }
 
 }
