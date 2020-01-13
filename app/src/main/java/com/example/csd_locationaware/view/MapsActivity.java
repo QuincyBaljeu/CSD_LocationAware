@@ -96,6 +96,7 @@ public class MapsActivity extends AppCompatActivity implements
         button_getNearestCafe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                placesApi.getData();
                 new FetchURL(MapsActivity.this).execute(Bars.getDirectionsUrl(currentLocation, Bars.bars.get(0).getLocation()), "walking");
             }
         });

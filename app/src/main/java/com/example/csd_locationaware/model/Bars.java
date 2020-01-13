@@ -54,7 +54,7 @@ public class Bars {
     }
 
     public static String getDirectionsUrl(LatLng origin, LatLng destination){
-        String url = getUrl(new LatLng(origin.latitude, origin.longitude), new LatLng(destination.latitude, destination.longitude), "driving");
+        String url = getUrl(new LatLng(origin.latitude, origin.longitude), new LatLng(destination.latitude, destination.longitude), "walking");
         return url;
     }
 
