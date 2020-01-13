@@ -59,11 +59,6 @@ public class MapsActivity extends AppCompatActivity implements
 
     private boolean StartUp = false;
 
-    private MarkerOptions place1;
-    private MarkerOptions place2;
-
-    private Button directionsButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,16 +81,6 @@ public class MapsActivity extends AppCompatActivity implements
                 }
                // new FetchURL(MapsActivity.this).execute(Bars.getDirectionsUrl(Bars.bars.get(1).getLocation(), Bars.bars.get(7).getLocation()), "walking");
                 Log.i(TAG, "doneLoading: done loading bars...");
-            }
-        });
-
-        directionsButton = findViewById(R.id.btn_showDirection);
-        directionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "requested directions call: " + Bars.getDirectionsUrl(place1.getPosition(), place2.getPosition()));
-
-                new FetchURL(MapsActivity.this).execute(Bars.getDirectionsUrl(place1.getPosition(), place2.getPosition()), "driving");
             }
         });
 
