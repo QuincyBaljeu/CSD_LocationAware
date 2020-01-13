@@ -1,8 +1,10 @@
-package com.example.csd_locationaware.util;
+package com.example.csd_locationaware.model;
 
 import android.util.Log;
 
 import com.example.csd_locationaware.controler.DoneLoading;
+import com.example.csd_locationaware.model.Bar;
+import com.example.csd_locationaware.view.Locations;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -16,6 +18,7 @@ public class Bars {
     public static List<Bar> bars = new ArrayList<>();
     private static boolean setUp = false;
     private static DoneLoading done;
+    public static boolean refreshing = false;
 
     public static void setUp(DoneLoading doneLoading) {
         setUp = true;
@@ -41,8 +44,12 @@ public class Bars {
                     Log.e(TAG, "generateBarList: ", e);
                 }
             }
-        }else Log.i(TAG, "generateBarList: Please call setUp() before trying to generate bars!");
-
+        } else Log.i(TAG, "generateBarList: Please call setUp() before trying to generate bars!");
+        refreshing = false;
+        try {
+            Locations.doneRefreshing();
+        } catch (NullPointerException e) {//catch for first bootup, its not very pretty but it works for now
+        }
         done.doneLoading();
     }
 

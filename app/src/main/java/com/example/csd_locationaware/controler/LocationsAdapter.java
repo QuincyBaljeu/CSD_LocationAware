@@ -1,6 +1,7 @@
 package com.example.csd_locationaware.controler;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.csd_locationaware.R;
-import com.example.csd_locationaware.util.Bar;
-import com.example.csd_locationaware.util.Bars;
+import com.example.csd_locationaware.model.Bar;
+import com.example.csd_locationaware.model.Bars;
 
 public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.LocationsViewHolder> {
 
     private Context context;
+    private static final String TAG = "@LOCATIONSADAPTER";
 
     public LocationsAdapter(Context context) {
         this.context = context;
@@ -41,6 +43,7 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
         return Bars.bars.size();
     }
 
+
     class LocationsViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView address;
@@ -51,6 +54,16 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
             super(itemView);
             name = itemView.findViewById(R.id.textView_Name);
             address = itemView.findViewById(R.id.textView_address);
+            button = itemView.findViewById(R.id.button_calculate_route);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    Bar selectedBar = Bars.bars.get(pos);
+                    Log.d(TAG, "onClick: " + selectedBar.toString());
+                }
+            });
         }
     }
 }

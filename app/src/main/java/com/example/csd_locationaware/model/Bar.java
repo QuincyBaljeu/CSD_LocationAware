@@ -1,4 +1,4 @@
-package com.example.csd_locationaware.util;
+package com.example.csd_locationaware.model;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -24,7 +24,6 @@ public class Bar {
     public String getAdress() {
         return adress;
     }
-
 
     @Override
     public String toString() {
