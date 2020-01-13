@@ -19,7 +19,7 @@ public class Locations extends AppCompatActivity {
 
     private static SwipeRefreshLayout refreshLayout;
     private static LocationsAdapter adapter;
-    private String TAG = "@LOCATIONS";
+    private static String TAG = "@LOCATIONS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,7 @@ public class Locations extends AppCompatActivity {
     public static void doneRefreshing() {
         refreshLayout.setRefreshing(false);
         adapter.notifyDataSetChanged();
+        Log.i(TAG, "doneRefreshing: finished refreshing...");
     }
 
     @Override
