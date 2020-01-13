@@ -34,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -83,6 +84,7 @@ public class MapsActivity extends AppCompatActivity implements
                     mMap.addMarker(new MarkerOptions().position(bar.getLocation()).title(bar.getName()));
 
                 }
+               // new FetchURL(MapsActivity.this).execute(Bars.getDirectionsUrl(Bars.bars.get(1).getLocation(), Bars.bars.get(7).getLocation()), "walking");
                 Log.i(TAG, "doneLoading: done loading bars...");
             }
         });
@@ -91,7 +93,9 @@ public class MapsActivity extends AppCompatActivity implements
         directionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new FetchURL(MapsActivity.this).execute(getUrl(place1.getPosition(), place2.getPosition(), "driving"), "driving");
+                Log.d(TAG, "requested directions call: " + Bars.getDirectionsUrl(place1.getPosition(), place2.getPosition()));
+
+                new FetchURL(MapsActivity.this).execute(Bars.getDirectionsUrl(place1.getPosition(), place2.getPosition()), "driving");
             }
         });
 
@@ -105,15 +109,6 @@ public class MapsActivity extends AppCompatActivity implements
         fragment.getMapAsync(this);
 
     }
-
-    public void setUpDirectionsTest(){
-        place1 = new MarkerOptions().position(new LatLng(51.571915, 4.768323)).title("Location 1");
-        place2 = new MarkerOptions().position(new LatLng(27.667491, 85.3208583)).title("Location 2");
-
-        mMap.addMarker(place1);
-        mMap.addMarker(place2);
-    }
-
 
     /**
      * Manipulates the map once available.
@@ -132,7 +127,9 @@ public class MapsActivity extends AppCompatActivity implements
         buildGoogleApiClient();
         mMap.setMyLocationEnabled(true);
 
-        setUpDirectionsTest();
+        UiSettings uiSettings = this.mMap.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -214,22 +211,6 @@ public class MapsActivity extends AppCompatActivity implements
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
-        // Origin of route
-        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
-        // Destination of route
-        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
-        // Mode
-        String mode = "mode=" + directionMode;
-        // Building the parameters to the web service
-        String parameters = str_origin + "&" + str_dest + "&" + mode;
-        // Output format
-        String output = "json";
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + getString(R.string.google_maps_key);
-        return url;
     }
 
     @Override

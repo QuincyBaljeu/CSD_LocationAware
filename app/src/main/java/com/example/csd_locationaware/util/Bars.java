@@ -47,7 +47,7 @@ public class Bars {
     }
 
     public static String getDirectionsUrl(LatLng origin, LatLng destination){
-        String url = getUrl(new LatLng(origin.latitude, origin.longitude), new LatLng(destination.latitude, destination.longitude), "walking");
+        String url = getUrl(new LatLng(origin.latitude, origin.longitude), new LatLng(destination.latitude, destination.longitude), "driving");
         return url;
     }
 
@@ -64,7 +64,7 @@ public class Bars {
         String output = "json";
         // Building the url to the web service
         //TODO API key from resource value
-        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=AIzaSyBifZx4KQ7SVgsSKdwW6H8mO-XuepF2Ur";
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=AIzaSyD0PiN81jwGCjn8z_VrAeKhywS3gpwCe18";
         return url;
     }
 }
