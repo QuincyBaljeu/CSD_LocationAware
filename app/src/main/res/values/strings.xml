@@ -6,4 +6,5 @@
     <string name="settings_satellite_title">Satellite view</string>
     <string name="settings_satellite_description">Enable satellite map view</string>
     <string name="setting_satellite_id">Satellite</string>
+    <string name="button_nearestbar">Ik wil pils</string>
 </resources>

@@ -61,11 +61,12 @@ public class MapsActivity extends AppCompatActivity implements
 
     private boolean StartUp = false;
 
+    private Button button_getNearestCafe;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
 
         placesApi = new PlacesApi(this, new LatLng(0, 0), new OnResponse() {
             @Override
@@ -86,6 +87,15 @@ public class MapsActivity extends AppCompatActivity implements
                 Log.i(TAG, "doneLoading: done loading bars...");
             }
         });
+
+        button_getNearestCafe = findViewById(R.id.button_nearestCafe);
+        button_getNearestCafe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FetchURL(MapsActivity.this).execute(Bars.getDirectionsUrl(currentLocation, Bars.bars.get(0).getLocation()), "walking");
+            }
+        });
+
 
         Toolbar toolbar = findViewById(R.id.custom_action_bar);
         setSupportActionBar(toolbar);
