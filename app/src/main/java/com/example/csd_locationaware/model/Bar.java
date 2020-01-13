@@ -25,7 +25,6 @@ public class Bar {
         return adress;
     }
 
-
     @Override
     public String toString() {
         return "Bar{" +
