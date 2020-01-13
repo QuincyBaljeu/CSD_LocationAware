@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -54,10 +55,11 @@ public class MapsActivity extends AppCompatActivity implements
     private GoogleMap mMap;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
-    private LatLng currentLocation = null;
+    public static LatLng currentLocation = null;
     private PlacesApi placesApi;
     private Polyline userPolyLine;
     private DoneLoading doneLoading;
+    public static Context context;
 
     private boolean StartUp = false;
 
@@ -67,6 +69,8 @@ public class MapsActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        context = this;
 
         placesApi = new PlacesApi(this, new LatLng(0, 0), new OnResponse() {
             @Override

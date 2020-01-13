@@ -33,7 +33,7 @@ public class Locations extends AppCompatActivity {
         refreshLayout = findViewById(R.id.swipeContainer);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView_locations);
-        adapter = new LocationsAdapter(this);
+        adapter = new LocationsAdapter(this,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
