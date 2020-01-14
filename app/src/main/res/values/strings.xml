@@ -1,4 +1,10 @@
 <resources>
-    <string name="app_name">CSD_LocationAware</string>
+    <string name="app_name">Pilsfinder</string>
     <string name="title_activity_maps">Map</string>
+    <string name="menu_settings_id">Settings menu</string>
+    <string name="menu_settings_title">Settings</string>
+    <string name="settings_satellite_title">Satellite view</string>
+    <string name="settings_satellite_description">Enable satellite map view</string>
+    <string name="setting_satellite_id">Satellite</string>
+    <string name="button_nearestbar">Ik wil pils</string>
 </resources>
