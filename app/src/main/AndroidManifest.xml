@@ -19,8 +19,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.Locations"></activity>
-        <activity android:name=".view.SettingsActivity" />
+        <activity android:name=".view.Locations"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".view.SettingsActivity"
+            android:screenOrientation="portrait"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -37,7 +39,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.MapsActivity">
+        <activity android:name=".view.MapsActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
